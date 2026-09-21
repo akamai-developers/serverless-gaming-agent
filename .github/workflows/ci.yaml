@@ -1,0 +1,25 @@
+name: "CI"
+on:
+  push:
+    branches:
+      - "main"
+env:
+  NODE_VERSION: "24"
+  SPIN_VERSION: ""
+jobs:
+  spin:
+    runs-on: "ubuntu-latest"
+    name: Build Spin App
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "${{ env.NODE_VERSION }}"
+      - name: Install Spin
+        uses: fermyon/actions/spin/setup@v1
+        with:
+          plugins: 
+      - name: Build gaming-agent
+        run: spin build
+        working-directory: .
