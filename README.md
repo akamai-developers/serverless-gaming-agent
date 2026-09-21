@@ -1,39 +1,38 @@
-# `http-ts` Template
+# Gaming Agent
 
-A starter template for building TypeScript HTTP applications with Spin.
+The Gaming Agent is a Spin application that exposes a small AI agent over HTTP. It talks to an Ollama-compatible LLM and can play simple games through tools — rolling a multi-sided dice and flipping a coin. Send a `POST /play` request with a JSON body like `{ "prompt": "roll a 20-sided dice" }` and the agent responds with the result.
 
-## Getting Started
+## Application Variables
 
-Build the App
+The agent reads its configuration from these Spin application variables:
+
+| Variable          | Required | Default | Description                                         |
+|-------------------|----------|---------|-----------------------------------------------------|
+| `ollama_base_url` | yes      | —       | Base URL of the Ollama-compatible endpoint          |
+| `ollama_api_key`  | yes      | —       | API key sent as a bearer token (secret)             |
+| `model_name`      | yes      | —       | Name of the model to use (e.g. `qwen2.5:7b`)        |
+| `ollama_api_path` | no       | `/api`  | API path appended to the base URL                   |
+
+## Run Locally
+
+When running with `spin up --build`, provide the required variables through
+`SPIN_VARIABLE_*` environment variables:
 
 ```bash
-spin build
+export SPIN_VARIABLE_ollama_base_url="http://localhost:8080"
+export SPIN_VARIABLE_ollama_api_key="<your-api-key>"
+export SPIN_VARIABLE_model_name="qwen2.5:7b"
+
+spin up --build
 ```
 
-## Run the App 
+## Deploy to Akamai Functions
+
+When deploying to Akamai Functions, set the variables by using the `--variable` flag:
 
 ```bash
-spin up
+spin aka deploy --build \
+  --variable ollama_base_url="https://your-ollama-host:8080" \
+  --variable ollama_api_key="<your-api-key>" \
+  --variable model_name = "qwen2.5:7b"
 ```
-
-## Using Spin Interfaces
-
-To use additional Spin interfaces, install the corresponding packages:
-
-| Interface     | Package                         |
-|---------------|---------------------------------|
-| Key-Value     | `@spinframework/spin-kv`        |
-| LLM           | `@spinframework/spin-llm`       |
-| MQTT          | `@spinframework/spin-mqtt`      |
-| MySQL         | `@spinframework/spin-mysql`     |
-| PostgreSQL    | `@spinframework/spin-postgres`  |
-| Redis         | `@spinframework/spin-redis`     |
-| SQLite        | `@spinframework/spin-sqlite`    |
-| Variables     | `@spinframework/spin-variables` |
-
-## Using the StarlingMonkey Debugger for VS Code
-
-1. First install the [StarlingMonkey Debugger](https://marketplace.visualstudio.com/items?itemName=BytecodeAlliance.starlingmonkey-debugger) extension.
-2. Build the component using the debug command `npm run build:debug`.
-3. Uncomment `tcp://127.0.0.1:*` in the `allowed_outbound_hosts` field in the `spin.toml`.
-4. Start the debugger in VS Code which should start Spin and attach the debugger. The debugger needs to be restarted for each http call.
