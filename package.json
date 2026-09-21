@@ -1,0 +1,30 @@
+{
+  "name": "gaming-agent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.mjs && mkdirp dist && j2w -i build/bundle.js --initLocation http://gaming-agent.localhost -o dist/gaming-agent.wasm",
+    "build:debug": "node build.mjs && mkdirp dist && j2w -d -i build/bundle.js --initLocation http://gaming-agent.localhost -o dist/gaming-agent.wasm",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.25.8",
+    "mkdirp": "^3.0.1",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^4.0.56",
+    "@spinframework/build-tools": "^1.0.4",
+    "@spinframework/spin-variables": "^1.0.1",
+    "@spinframework/wasi-http-proxy": "^1.0.0",
+    "ai": "^7.0.51",
+    "hono": "^4.7.4",
+    "ollama-ai-provider-v2": "^4.0.1",
+    "zod": "^4.4.3"
+  }
+}

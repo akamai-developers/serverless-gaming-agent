@@ -1,0 +1,32 @@
+spin_manifest_version = 2
+
+[application]
+authors = ["Thorsten Hans <thans@akamai.com>"]
+description = ""
+name = "gaming-agent"
+version = "0.1.0"
+targets = ["akamai-functions"]
+
+[variables]
+ollama_api_key = { required = true, secret = true }
+ollama_api_path = { default = "/api" }
+ollama_base_url = { required = true }
+model_name = { required = true }
+
+[[trigger.http]]
+route = "/..."
+component = "gaming-agent"
+
+[component.gaming-agent]
+source = "dist/gaming-agent.wasm"
+exclude_files = ["**/node_modules"]
+allowed_outbound_hosts = ["{{ ollama_base_url }}"]
+
+[component.gaming-agent.variables]
+ollama_url = "{{ ollama_base_url }}{{ ollama_api_path }}"
+ollama_api_key = "{{ ollama_api_key }}"
+model_name = "{{ model_name }}"
+
+[component.gaming-agent.build]
+command = ["npm install", "npm run build"]
+watch = ["src/**/*.ts"]
