@@ -20,5 +20,5 @@ export function loadConfig(): Config {
   if (!ollamaUrl || !ollamaApiKey || !modelName) {
     throw new ConfigError();
   }
-  return { ollamaUrl, ollamaApiKey, modelName } as Config;
+  return  { ollamaUrl, ollamaApiKey, modelName } as Config;
 }

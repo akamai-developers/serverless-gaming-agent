@@ -14,11 +14,11 @@ ollama_base_url = { required = true }
 model_name = { required = true }
 
 [[trigger.http]]
-route = "/..."
+route = "/play"
 component = "gaming-agent"
 
 [component.gaming-agent]
-source = "dist/gaming-agent.wasm"
+source = "agent/dist/gaming-agent.wasm"
 exclude_files = ["**/node_modules"]
 allowed_outbound_hosts = ["{{ ollama_base_url }}"]
 
@@ -28,5 +28,14 @@ ollama_api_key = "{{ ollama_api_key }}"
 model_name = "{{ model_name }}"
 
 [component.gaming-agent.build]
+workdir = "agent"
 command = ["npm install", "npm run build"]
 watch = ["src/**/*.ts"]
+
+[[trigger.http]]
+route = "/..."
+component = "frontend"
+
+[component.frontend]
+source = { url = "https://github.com/spinframework/spin-fileserver/releases/download/v0.3.0/spin_static_fs.wasm", digest = "sha256:ef88708817e107bf49985c7cefe4dd1f199bf26f6727819183d5c996baa3d148" }
+files = [{ source = "frontend", destination = "/" }]

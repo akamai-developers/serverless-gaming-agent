@@ -9,7 +9,6 @@ import { flipCoinTool, rollDiceTool } from './tools';
 import { ConfigError, loadConfig } from './config';
 
 let app = new Hono();
-app.use(logger());
 
 
 app.post("/play", async (c: Context) => {
@@ -34,7 +33,7 @@ app.post("/play", async (c: Context) => {
       tools: { roll_a_dice: rollDiceTool, flip_a_coin: flipCoinTool },
       stopWhen: stepCountIs(4),
       onToolExecutionEnd({ toolCall, toolExecutionMs }) {
-        console.log(`Tool ${toolCall.toolName} finished in ${toolExecutionMs}ms.`)
+          console.log(`Tool ${toolCall.toolName} finished in ${toolExecutionMs}ms.`)
       }
     });
 
@@ -43,7 +42,7 @@ app.post("/play", async (c: Context) => {
 
     });
 
-    return c.json({ "result": result.text }, 200);
+    return c.json({ "result": result.text, "toolCalls": result.toolCalls}, 200);
   } catch (error: any) {
     console.log(JSON.stringify(error));
     return c.json({ "error": error.message }, 500);
