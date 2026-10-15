@@ -13,7 +13,7 @@ const flipCoinTool = tool({
 const rollDiceTool = tool({
   description: "Rolls a multi-sided dice. Specify the number of sides when invoking the tool",
   inputSchema: z.object({
-    sides: z.number().describe("How many sides should the dice have?")
+    sides: z.number().int().min(2).describe("How many sides should the dice have?")
   }),
   execute: async ({ sides }) => {
     const min = 1;

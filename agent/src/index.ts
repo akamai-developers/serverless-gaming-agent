@@ -12,8 +12,8 @@ let app = new Hono();
 
 app.post("/play", async (c: Context) => {
   try {
-    const payload = await c.req.json();
-    if (!payload.prompt) {
+    const payload = await c.req.json().catch(() => null);
+    if (!payload || typeof payload.prompt !== "string" || !payload.prompt.trim()) {
       return c.json({ "message": "Bad Request" }, 400);
     }
 
@@ -44,7 +44,7 @@ app.post("/play", async (c: Context) => {
     return c.json({ "result": result.text, "toolCalls": result.toolCalls }, 200);
   } catch (error: any) {
     console.log(JSON.stringify(error));
-    return c.json({ "error": error.message }, 500);
+    return c.json({ "error": "Internal Server Error" }, 500);
   }
 })
 fire(app);
